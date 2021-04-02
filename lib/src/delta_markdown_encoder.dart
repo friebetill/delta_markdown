@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter_quill/models/documents/attribute.dart';
@@ -236,6 +237,9 @@ class DeltaMarkdownEncoder extends Converter<String, String> {
       buffer.write('* ');
     } else if (block == Attribute.ol) {
       buffer.write('1. ');
+    } else if (block.key == Attribute.list.key) {
+      final check = block.value == 'checked' ? 'x' : ' ';
+      buffer.write('- [$check] ');
     } else if (block.key == Attribute.h1.key && block.value == 1) {
       buffer.write('# ');
     } else if (block.key == Attribute.h2.key && block.value == 2) {
