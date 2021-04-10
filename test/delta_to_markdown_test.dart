@@ -119,4 +119,24 @@ void main() {
 
     expect(result, expected);
   });
+
+  test('Works with checked task list item', () {
+    const delta =
+        r'[{"insert": "Foo"},{"attributes": {"list": "checked"},"insert": "\n"}]';
+    const expected = '- [x] Foo\n';
+
+    final result = deltaToMarkdown(delta);
+
+    expect(result, expected);
+  });
+
+  test('Works with unchecked task list item', () {
+    const delta =
+        r'[{"insert": "Foo"},{"attributes": {"list": "unchecked"},"insert": "\n"}]';
+    const expected = '- [ ] Foo\n';
+
+    final result = deltaToMarkdown(delta);
+
+    expect(result, expected);
+  });
 }
