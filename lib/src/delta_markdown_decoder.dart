@@ -247,9 +247,9 @@ class _DeltaVisitor implements ast.NodeVisitor {
 }
 
 class ImageAttribute extends Attribute<String?> {
-  ImageAttribute(String? val) : super('image', AttributeScope.EMBEDS, val);
+  ImageAttribute(String? val) : super('image', AttributeScope.embeds, val);
 }
 
 class DividerAttribute extends Attribute<String?> {
-  DividerAttribute() : super('divider', AttributeScope.EMBEDS, 'hr');
+  DividerAttribute() : super('divider', AttributeScope.embeds, 'hr');
 }
