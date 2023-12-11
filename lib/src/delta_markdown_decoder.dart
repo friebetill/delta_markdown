@@ -1,8 +1,8 @@
 import 'dart:collection';
 import 'dart:convert';
 
-import 'package:flutter_quill/flutter_quill.dart'
-    show Attribute, AttributeScope, Delta, LinkAttribute;
+import 'package:flutter_quill/flutter_quill.dart' show Attribute, AttributeScope, LinkAttribute;
+import 'package:flutter_quill/quill_delta.dart' show Delta;
 
 import 'ast.dart' as ast;
 import 'document.dart';
@@ -19,8 +19,7 @@ class DeltaMarkdownDecoder extends Converter<String, String> {
 }
 
 class _DeltaVisitor implements ast.NodeVisitor {
-  static final _blockTags =
-      RegExp('h1|h2|h3|h4|h5|h6|hr|pre|ul|ol|blockquote|p|pre');
+  static final _blockTags = RegExp('h1|h2|h3|h4|h5|h6|hr|pre|ul|ol|blockquote|p|pre');
 
   static final _embedTags = RegExp('hr|img');
 
@@ -122,10 +121,7 @@ class _DeltaVisitor implements ast.NodeVisitor {
         //     element.tag == 'p') {
         //   delta.insert('\n');
         // }
-      } else if (element.tag == 'p' &&
-          previousElement != null &&
-          !previousElement!.isToplevel &&
-          !previousElement!.children!.contains(element)) {
+      } else if (element.tag == 'p' && previousElement != null && !previousElement!.isToplevel && !previousElement!.children!.contains(element)) {
         // Here we have two children of the same toplevel element. These need
         // to be separated by additional newlines.
 
@@ -174,9 +170,7 @@ class _DeltaVisitor implements ast.NodeVisitor {
 
   @override
   void visitElementAfter(ast.Element element) {
-    if (element.tag == 'li' &&
-        (previousToplevelElement.tag == 'ol' ||
-            previousToplevelElement.tag == 'ul')) {
+    if (element.tag == 'li' && (previousToplevelElement.tag == 'ol' || previousToplevelElement.tag == 'ul')) {
       delta.insert('\n', activeBlockAttribute?.toJson());
     }
 
@@ -247,9 +241,19 @@ class _DeltaVisitor implements ast.NodeVisitor {
 }
 
 class ImageAttribute extends Attribute<String?> {
-  ImageAttribute(String? val) : super('image', AttributeScope.embeds, val);
+  const ImageAttribute(String? val)
+      : super(
+          'image',
+          AttributeScope.embeds,
+          val,
+        );
 }
 
 class DividerAttribute extends Attribute<String?> {
-  DividerAttribute() : super('divider', AttributeScope.embeds, 'hr');
+  const DividerAttribute()
+      : super(
+          'divider',
+          AttributeScope.embeds,
+          'hr',
+        );
 }
