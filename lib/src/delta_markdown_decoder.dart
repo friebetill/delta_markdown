@@ -2,7 +2,8 @@ import 'dart:collection';
 import 'dart:convert';
 
 import 'package:flutter_quill/flutter_quill.dart'
-    show Attribute, AttributeScope, Delta, LinkAttribute;
+    show Attribute, AttributeScope, LinkAttribute;
+import 'package:flutter_quill/quill_delta.dart';
 
 import 'ast.dart' as ast;
 import 'document.dart';
