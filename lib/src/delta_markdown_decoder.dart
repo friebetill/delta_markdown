@@ -10,9 +10,12 @@ import 'document.dart';
 class DeltaMarkdownDecoder extends Converter<String, String> {
   @override
   String convert(String input) {
-    final lines = input.replaceAll('\r\n', '\n').split('\n');
+    final lines = input.replaceAll("\n\n\n", "--##%%!!##@@----##%%!!##@@--\n").replaceAll("\n\n", "--##%%!!##@@--\n").replaceAll('\r\n', '\n').split('\n');
 
-    final markdownDocument = Document().parseLines(lines);
+    List<String> newLines=lines.map((e) {
+      return e.replaceAll("--##%%!!##@@--", "\n");
+    }).toList();
+    final markdownDocument = Document().parseLines(newLines);
 
     return jsonEncode(_DeltaVisitor().convert(markdownDocument).toJson());
   }
