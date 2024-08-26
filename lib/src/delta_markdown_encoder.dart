@@ -2,7 +2,8 @@ import 'dart:convert';
 
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter_quill/flutter_quill.dart'
-    show Attribute, AttributeScope, BlockEmbed, Delta, DeltaIterator, Style;
+    show Attribute, AttributeScope, BlockEmbed, Style;
+import 'package:flutter_quill/quill_delta.dart';
 
 class DeltaMarkdownEncoder extends Converter<String, String> {
   static const _lineFeedAsciiCode = 0x0A;
@@ -20,7 +21,7 @@ class DeltaMarkdownEncoder extends Converter<String, String> {
   String convert(String input) {
     markdownBuffer = StringBuffer();
     lineBuffer = StringBuffer();
-    currentInlineStyle = Style();
+    currentInlineStyle = const Style();
     currentBlockLines = <String>[];
 
     final inputJson = jsonDecode(input) as List<dynamic>?;
@@ -66,7 +67,7 @@ class DeltaMarkdownEncoder extends Converter<String, String> {
     for (final value
         in currentInlineStyle.attributes.values.toList().reversed) {
       // TODO(tillf): Is block correct?
-      if (value.scope == AttributeScope.BLOCK) {
+      if (value.scope == AttributeScope.block) {
         continue;
       }
       if (style.containsKey(value.key)) {
@@ -89,7 +90,7 @@ class DeltaMarkdownEncoder extends Converter<String, String> {
     // Now open any new styles.
     for (final attribute in style.attributes.values) {
       // TODO(tillf): Is block correct?
-      if (attribute.scope == AttributeScope.BLOCK) {
+      if (attribute.scope == AttributeScope.block) {
         continue;
       }
       if (currentInlineStyle.containsKey(attribute.key)) {
@@ -124,7 +125,7 @@ class DeltaMarkdownEncoder extends Converter<String, String> {
         final lineBlock = Style.fromJson(attributes)
             .attributes
             .values
-            .singleWhereOrNull((a) => a.scope == AttributeScope.BLOCK);
+            .singleWhereOrNull((a) => a.scope == AttributeScope.block);
 
         if (lineBlock == currentBlockStyle) {
           currentBlockLines.add(lineBuffer.toString());

@@ -2,7 +2,8 @@ import 'dart:collection';
 import 'dart:convert';
 
 import 'package:flutter_quill/flutter_quill.dart'
-    show Attribute, AttributeScope, Delta, LinkAttribute;
+    show Attribute, AttributeScope, LinkAttribute;
+import 'package:flutter_quill/quill_delta.dart';
 
 import 'ast.dart' as ast;
 import 'document.dart';
@@ -239,7 +240,7 @@ class _DeltaVisitor implements ast.NodeVisitor {
         final href = el.attributes['src'];
         return ImageAttribute(href);
       case 'hr':
-        return DividerAttribute();
+        return const DividerAttribute();
     }
 
     return null;
@@ -247,9 +248,14 @@ class _DeltaVisitor implements ast.NodeVisitor {
 }
 
 class ImageAttribute extends Attribute<String?> {
-  ImageAttribute(String? val) : super('image', AttributeScope.EMBEDS, val);
+  const ImageAttribute(String? val)
+      : super(
+          'image',
+          AttributeScope.embeds,
+          val,
+        );
 }
 
 class DividerAttribute extends Attribute<String?> {
-  DividerAttribute() : super('divider', AttributeScope.EMBEDS, 'hr');
+  const DividerAttribute() : super('divider', AttributeScope.embeds, 'hr');
 }
